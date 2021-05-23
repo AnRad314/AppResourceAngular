@@ -3,3 +3,5 @@
 ################################################################################
 
 /.vs
+/AppResourceAngular/bin/Debug/netcoreapp3.1
+/AppResourceAngular/obj
