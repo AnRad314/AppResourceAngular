@@ -28,11 +28,7 @@ export class DataService {
     
     httpOptions = {
       headers: new HttpHeaders({ 'Content-Type': 'application/json' })
-    };
-
-  //addResource(res: Resource): Observable<Resource> {
-  //  return this.http.post<Resource>(this.resourcesUrl, res, this.httpOptions)
-  //};
+    }; 
 
   addResource(res: Resource): Observable<any> {
     return this.http.post<Resource>(this.resourcesUrl, res, this.httpOptions)

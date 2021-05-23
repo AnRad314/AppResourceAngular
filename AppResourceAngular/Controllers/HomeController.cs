@@ -21,11 +21,7 @@ namespace AppResourceAngular.Controllers
 				Resource res = new Resource { Data = "Masha" };
 				_provider.CreateResource(res);
 			}
-		}
-		public IActionResult Index()
-		{
-			return View();
-		}
+		}		
 
 		[HttpGet]
 		public IEnumerable <Resource> Get ()	
@@ -40,12 +36,12 @@ namespace AppResourceAngular.Controllers
 			return res;
 		}
 
-		[HttpPost]
-		public IActionResult AddResource(string res)
+		[HttpPost]		
+		public IActionResult PostResource([FromBody] string res)
 		{
 			if (ModelState.IsValid)
 			{
-				_provider.CreateResource(new Resource() { Data = res });
+				_provider.CreateResource(new Resource() { Data = res.ToString() });
 				return Ok(res);
 			}
 			return BadRequest(ModelState);

@@ -1,9 +1,9 @@
 import { Component, Inject } from '@angular/core';
 import { Resource } from '../resource';
-import { ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
 import { DataService } from '../data.service';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 @Component({
   selector: 'app-resource-add',
@@ -12,35 +12,44 @@ import { HttpClient } from '@angular/common/http';
 })
 export class ResourceAddComponent {
 
-  
-  http: HttpClient;
   baseUrl: string;
 
-  constructor(http: HttpClient, @Inject('BASE_URL') baseUrl: string,
-    private route: ActivatedRoute,
+  constructor(
+    private http: HttpClient,
+    @Inject('BASE_URL') baseUrl: string,
+    private router: Router,
     private dataService: DataService,
     private location: Location
-  ) { }
-
-  
-  //getResource(): void {
-  //  const id = Number(this.route.snapshot.paramMap.get('id'));
-  //  this.dataService.getResource(id)
-  //    .subscribe(resource => this.resource = resource);
-  //}
-  goBack(): void {
-    this.location.back();
+  )
+  {
+    this.baseUrl = baseUrl;
   }
 
   add(res: string): void {
-    this.http.post(this.baseUrl + 'api/resources', res);
+    const headers = new HttpHeaders()
+      .set('Content-Type', 'application/json')
+      .set('Accept', 'application/json')
+
+    this.http.post(this.baseUrl + 'api/resources', JSON.stringify(res), { headers: headers })
+      .subscribe(result => {
+        this.goBack();
+      }, error => console.error(error));
   }
 
-  //save(): void {
-  //  this.http.post(this.baseUrl + 'api/resources').subscribe(result => {
-  //    this.resource = result;
-  //  }, error => console.error(error));
+  //add(res: string): void {
+  //  const headers = new HttpHeaders()
+  //    .set('Content-Type', 'application/json')
+  //    .set('Accept', 'application/json')
 
+  //  this.http.post(this.baseUrl + 'api/resources', JSON.stringify(res), { headers: headers })
+  //    .subscribe(result => {
+  //      this.router.navigateByUrl(this.baseUrl);
+  //    }, error => console.error(error));
   //}
+
+  goBack(): void {
+    this.location.back();
+  }
+  
   
 }

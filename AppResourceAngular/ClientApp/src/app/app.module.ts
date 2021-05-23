@@ -12,7 +12,7 @@ import { ResourcesComponent } from './resources/resources.component';
 import { ResourceDetalComponent } from './resource-detal/resource-detal.component';
 import { AppRoutingModule } from './app-routing.module';
 import { HttpClientInMemoryWebApiModule } from 'angular-in-memory-web-api';
-//import { InMemoryDataService } from './in-memory-data.service'
+
 import { catchError, map, tap } from 'rxjs/operators';
 import { ResourceAddComponent } from './resource-add/resource-add.component';
 
@@ -29,10 +29,7 @@ import { ResourceAddComponent } from './resource-add/resource-add.component';
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
-    HttpClientModule,
-    //HttpClientInMemoryWebApiModule.forRoot(
-    //  InMemoryDataService, { dataEncapsulation: false }
-    //),
+    HttpClientModule,    
     FormsModule,
     RouterModule.forRoot([
       { path: '', component: HomeComponent, pathMatch: 'full' },
