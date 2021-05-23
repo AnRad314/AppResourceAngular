@@ -15,12 +15,7 @@ namespace AppResourceAngular.Controllers
 		private readonly IDataProvider _provider;
 		public HomeController(IDataProvider provider)
 		{			
-			_provider = provider;
-			if(!_provider.Resources.Any())
-			{
-				Resource res = new Resource { Data = "Masha" };
-				_provider.CreateResource(res);
-			}
+			_provider = provider;			
 		}		
 
 		[HttpGet]
