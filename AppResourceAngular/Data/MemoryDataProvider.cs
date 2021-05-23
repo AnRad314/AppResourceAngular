@@ -3,6 +3,7 @@ using AppResourceAngular.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace AppResourceAngular.Data
@@ -10,87 +11,140 @@ namespace AppResourceAngular.Data
 	public class MemoryDataProvider: IDataProvider
 	{
 		private int _lastId = 1;
-		private List<InternalResource> _resources = new List<InternalResource>();
-		public IEnumerable<InternalResource> Resources => _resources;
+		private readonly List<InternalResource> _resources = new List<InternalResource>();
+		private readonly ReaderWriterLock _rwl = new ReaderWriterLock();
+		
+		public IEnumerable<InternalResource> Resources
+		{
+			get
+			{
+				_rwl.AcquireReaderLock(Timeout.Infinite);
+				try
+				{
+					return _resources.ToArray();
+				}
+				finally
+				{
+					_rwl.ReleaseReaderLock();
+				}
+			}
+		} 
 
 		public EditResource BeginEdit(int id)
 		{
-			foreach (var item in _resources)
+			_rwl.AcquireReaderLock(Timeout.Infinite);
+			try 
 			{
-				if (item.Resource.Id == id)
+				foreach (var item in _resources)
 				{
-					if(item.IsEdit)
+					if (item.Resource.Id == id)
 					{
+						if (item.IsEdit)
+						{							
+							return new EditResource()
+							{
+								Data = item.Resource,
+								AllowEdit = false
+							};
+						}
+
+						item.IsEdit = true;						
 						return new EditResource()
 						{
 							Data = item.Resource,
-							AllowEdit = false							
+							AllowEdit = true
 						};
 					}
-
-					item.IsEdit = true;
-					return new EditResource()
-					{
-						Data = item.Resource,
-						AllowEdit = true
-					};
 				}
+				return null;
 			}
-			return null;
+			finally
+			{
+				_rwl.ReleaseReaderLock();
+			}			
 		}
 
 		public bool EndEdit(Resource res)
 		{
-			foreach (var item in _resources)
+			_rwl.AcquireReaderLock(Timeout.Infinite);
+			try 
 			{
-				if (item.Resource.Id == res.Id)
+				foreach (var item in _resources)
 				{
-					if (item.IsEdit)
+					if (item.Resource.Id == res.Id)
 					{
-						item.IsEdit = false;
-						item.Resource = res;
-						return true;
+						if (item.IsEdit)
+						{
+							item.IsEdit = false;
+							item.Resource = res;							
+							return true;
+						}
 					}
 				}
+				return false;
 			}
-			return false;
+			finally
+			{
+				_rwl.ReleaseReaderLock();
+			}
 		}
 
 		public void CancelEdit(int id)
 		{
-			foreach(var item in _resources)
+			_rwl.AcquireReaderLock(Timeout.Infinite);
+			try 
 			{
-				if (item.Resource.Id == id)
+				foreach (var item in _resources)
 				{
-					item.IsEdit = false;
-					break;
+					if (item.Resource.Id == id)
+					{
+						item.IsEdit = false;						
+						break;
+					}
 				}
 			}
+			finally
+			{
+				_rwl.ReleaseReaderLock();
+			}					
 		}
 
 		public void CreateResource(string data)
 		{
-			var newRes = new InternalResource 
-			{ 
-				Resource = new Resource { Id = _lastId, Data = data }
-			};
-			_lastId++;
-			_resources.Add(newRes);
+			_rwl.AcquireWriterLock(Timeout.Infinite);
+			try 
+			{
+				var newRes = new InternalResource
+				{
+					Resource = new Resource { Id = _lastId, Data = data }
+				};
+				_lastId++;
+				_resources.Add(newRes);
+			}
+			finally
+			{
+				_rwl.ReleaseWriterLock();
+			}
 		}
 
 		public void DeleteResource(int id)
 		{
-			foreach(var res in _resources)
+			_rwl.AcquireWriterLock(Timeout.Infinite);
+			try 
 			{
-				if(res.Resource.Id == id)
+				foreach (var res in _resources)
 				{
-					_resources.Remove(res);
-					break;
+					if (res.Resource.Id == id)
+					{
+						_resources.Remove(res);
+						break;
+					}
 				}
 			}
-			
+			finally 
+			{ 
+				_rwl.ReleaseWriterLock();
+			}							
 		}
-
-		
 	}
 }
