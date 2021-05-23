@@ -4,7 +4,9 @@ import { EditResource } from '../editResource';
 import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+
 import { Observable, of } from 'rxjs';
+
 
 @Component({
   selector: 'app-resource-detal',
@@ -14,9 +16,13 @@ import { Observable, of } from 'rxjs';
 
 export class ResourceDetalComponent implements OnInit {
   
-  resource: Resource | undefined;
+  @Input('src')
+  private template: string;
+  editRes: EditResource
   baseUrl: string;
   private resourcesUrl = 'api/resources';
+  editMode: boolean = true;
+  
   constructor(@Inject('BASE_URL') baseUrl: string,   
     private http: HttpClient,
     private location: Location,
@@ -32,9 +38,16 @@ export class ResourceDetalComponent implements OnInit {
 
   ngOnInit(): void {    
     const id = Number(this.route.snapshot.paramMap.get('id'));
-
     this.http.get<EditResource>(`api/resources/edit/${id}`).subscribe(r => {
-      this.resource = r.data;
+      this.editRes = r
+    });
+    
+  }
+
+  refresh(): void {
+    const id = Number(this.route.snapshot.paramMap.get('id'));
+    this.http.get<EditResource>(`api/resources/edit/${id}`).subscribe(r => {
+      this.editRes = r
     });
   }
 
@@ -43,8 +56,8 @@ export class ResourceDetalComponent implements OnInit {
   }
 
   save(): void {
-    if (this.resource) {
-      this.updateResource(this.resource)
+    if (this.editRes.data) {
+      this.updateResource(this.editRes.data)
         .subscribe(() => this.goBack());
     }
   }
@@ -54,8 +67,8 @@ export class ResourceDetalComponent implements OnInit {
   };
 
   delete(): void {
-    if (this.resource) {
-      this.deleteResource(this.resource.id).subscribe(() => this.goBack());
+    if (this.editRes.data) {
+      this.deleteResource(this.editRes.data.id).subscribe(() => this.goBack());
     }    
   }
 
@@ -64,14 +77,4 @@ export class ResourceDetalComponent implements OnInit {
     return this.http.delete<Resource>(url, this.httpOptions);
   }
 
-
-  //delete(res: Resource): void {
-  //  this.resources = this.resources.filter(h => h !== res);
-  //  this.deleteResource(res.id).subscribe(res => this.resources = this.resources);
-  //}
-
-  //deleteResource(id: number): Observable<Resource> {
-  //  const url = `${this.baseUrl}api/resources/${id}`;
-  //  return this.http.delete<Resource>(url, this.httpOptions);
-  //}
 }

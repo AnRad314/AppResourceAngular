@@ -1,12 +1,23 @@
-<div *ngIf="resource">
-
-  <h2>Edit</h2>
+<div *ngIf="editRes.allowEdit; else locked">
+  <h2>Edit mode</h2>
   <div>
     <label for="resource-data">Resource data: </label>
-    <input id="resource-data" [(ngModel)]="resource.data" placeholder="Resource data">
+    <input id="resource-data" [(ngModel)]="editRes.data.data" placeholder="Resource data">
   </div>
 
   <button (click)="save()" class="btn btn-success">Save</button>
   <button (click)="delete()" class=" btn btn-danger">Delete</button>
-  <button (click)="goBack()" class="btn btn-warning">Go back</button>
+  <button (click)="goBack()" class="btn btn-secondary">Cancel</button>
 </div>
+
+
+<ng-template #locked>
+  <h2>Read-only mode (this resource is locked by other user)</h2>
+  <div>
+    <label for="resource-data">Resource data: </label>
+    <input id="resource-data" [(ngModel)]="editRes.data.data" placeholder="Resource data" readonly>
+  </div>
+  <input type="button" value="Refresh" (click)="refresh()" class="btn btn-sm btn-success" />
+  <input type="button" value="Back" (click)="goBack()" class="btn btn-sm btn-secondary" />
+
+</ng-template>
