@@ -13,5 +13,6 @@ namespace AppResourceAngular.Interface
 		void DeleteResource(int id);
 		EditResource BeginEdit(int id);
 		bool EndEdit(Resource res);
+		void CancelEdit(int id);
 	}
 }

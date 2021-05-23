@@ -1,7 +1,16 @@
+
+<div class="container mb-20">
+  <nav>
+    <div class="d-flex align-items-start">
+      <a routerLink="/create">Create new </a>
+    </div>    
+  </nav>
+</div>
+
 <h2>Resources</h2>
 <ul class="resources">
-  <li *ngFor="let res of resources" (click)="onSelect(res)" [class.selected]="resource === selectedResource">
-    <span class="badge">{{res.id}}</span> {{res.data}}
+  <li *ngFor="let res of resources" >
+    <span class="badge ">{{res.id}}</span> {{res.data}}
     <a routerLink="/detail/{{res.id}}">Edit</a>   
   </li>
 </ul>

@@ -8,6 +8,9 @@ a {
 code {
   color: #e01a76;
 }
+button {
+    margin: 20px;
+}
 
 .btn-primary {
   color: #fff;

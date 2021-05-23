@@ -56,6 +56,18 @@ namespace AppResourceAngular.Data
 			return false;
 		}
 
+		public void CancelEdit(int id)
+		{
+			foreach(var item in _resources)
+			{
+				if (item.Resource.Id == id)
+				{
+					item.IsEdit = false;
+					break;
+				}
+			}
+		}
+
 		public void CreateResource(string data)
 		{
 			var newRes = new InternalResource 
@@ -78,5 +90,7 @@ namespace AppResourceAngular.Data
 			}
 			
 		}
+
+		
 	}
 }

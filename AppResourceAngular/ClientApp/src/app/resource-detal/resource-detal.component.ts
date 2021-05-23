@@ -52,7 +52,10 @@ export class ResourceDetalComponent implements OnInit {
   }
 
   goBack(): void {
-    this.location.back();
+    const id = Number(this.route.snapshot.paramMap.get('id'));
+    this.http.get<EditResource>(`api/resources/cancelEdit/${id}`).subscribe(r => {
+      this.location.back();
+    });    
   }
 
   save(): void {

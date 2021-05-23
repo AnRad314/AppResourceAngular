@@ -61,6 +61,13 @@ namespace AppResourceAngular.Controllers
 			return BadRequest(ModelState);
 		}
 
+		[HttpGet("cancelEdit/{id}")]
+		public IActionResult CancelEdit(int id)
+		{
+			_provider.CancelEdit(id);
+			return Ok();
+		}
+
 		[HttpDelete("{id}")]
 		public IActionResult DeleteResource(int id)
 		{
