@@ -1,12 +1,8 @@
 <h2>Resources</h2>
 <ul class="resources">
-  <li *ngFor="let res of resources"
-      (click)="onSelect(res)" [class.selected]="resource === selectedResource">
+  <li *ngFor="let res of resources" (click)="onSelect(res)" [class.selected]="resource === selectedResource">
     <span class="badge">{{res.id}}</span> {{res.data}}
-    <a routerLink="/detail/{{res.id}}">Edit</a>
-    <button class="delete" title="delete res"
-            (click)="delete(res)"> Delete
-    </button>
+    <a routerLink="/detail/{{res.id}}">Edit</a>   
   </li>
 </ul>
 

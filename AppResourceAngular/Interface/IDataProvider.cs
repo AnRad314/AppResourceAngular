@@ -8,11 +8,10 @@ namespace AppResourceAngular.Interface
 {
 	public interface IDataProvider
 	{
-		IEnumerable<Resource> Resources { get; }
-		void CreateResource(Resource res);
+		IEnumerable<InternalResource> Resources { get; }
+		void CreateResource(string data);
 		void DeleteResource(int id);
-		void UpdateResource(Resource res);
-		void BeginBlock(Resource res);
-		void EndBlock(Resource res);
+		EditResource BeginEdit(int id);
+		bool EndEdit(Resource res);
 	}
 }

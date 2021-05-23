@@ -24,10 +24,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="ClientApp\src\app\EditResource.ts" />
     <None Remove="ClientApp\src\app\resource.ts" />
   </ItemGroup>
 
   <ItemGroup>
+    <TypeScriptCompile Include="ClientApp\src\app\editResource.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\resource.ts" />
   </ItemGroup>
 

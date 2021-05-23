@@ -10,53 +10,73 @@ namespace AppResourceAngular.Data
 	public class MemoryDataProvider: IDataProvider
 	{
 		private int _lastId = 1;
-		private List<Resource> _resources = new List<Resource>();
-		public IEnumerable<Resource> Resources => _resources;
+		private List<InternalResource> _resources = new List<InternalResource>();
+		public IEnumerable<InternalResource> Resources => _resources;
 
-		public void BeginBlock(Resource res)
+		public EditResource BeginEdit(int id)
 		{
 			foreach (var item in _resources)
 			{
-				if (item.Id == res.Id)
+				if (item.Resource.Id == id)
 				{
-					item.isEdit = true;
+					if(item.IsEdit)
+					{
+						return new EditResource()
+						{
+							Data = item.Resource,
+							AllowEdit = false							
+						};
+					}
+
+					item.IsEdit = true;
+					return new EditResource()
+					{
+						Data = item.Resource,
+						AllowEdit = true
+					};
 				}
 			}
+			return null;
 		}
 
-		public void CreateResource(Resource res)
+		public bool EndEdit(Resource res)
 		{
-			res.Id = _lastId;
+			foreach (var item in _resources)
+			{
+				if (item.Resource.Id == res.Id)
+				{
+					if (item.IsEdit)
+					{
+						item.IsEdit = false;
+						item.Resource = res;
+						return true;
+					}
+				}
+			}
+			return false;
+		}
+
+		public void CreateResource(string data)
+		{
+			var newRes = new InternalResource 
+			{ 
+				Resource = new Resource { Id = _lastId, Data = data }
+			};
 			_lastId++;
-			_resources.Add(res);
+			_resources.Add(newRes);
 		}
 
 		public void DeleteResource(int id)
 		{
-			_resources.Remove(_resources.FirstOrDefault(d => d.Id == id));
-		}
-
-		public void EndBlock(Resource res)
-		{
-			foreach (var item in _resources)
+			foreach(var res in _resources)
 			{
-				if (item.Id == res.Id)
+				if(res.Resource.Id == id)
 				{
-					item.isEdit = false;
+					_resources.Remove(res);
+					break;
 				}
 			}
-		}
-		public void UpdateResource(Resource res)
-		{
-
-			foreach (var item in _resources)
-			{
-				if (item.Id == res.Id)
-				{
-
-					item.Data = res.Data;
-				}
-			}
+			
 		}
 	}
 }

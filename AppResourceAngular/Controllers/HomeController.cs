@@ -19,39 +19,42 @@ namespace AppResourceAngular.Controllers
 		}		
 
 		[HttpGet]
-		public IEnumerable <Resource> Get ()	
+		public IEnumerable<Resource> Get()	
 		{
-			return _provider.Resources.ToList();
+			return _provider.Resources.Select(r => r.Resource).ToArray();
 		}
 
 		[HttpGet("{id}")]
 		public Resource Get(int id)
 		{
-			Resource res = _provider.Resources.FirstOrDefault(x => x.Id == id);
+			Resource res = _provider.Resources.FirstOrDefault(x => x.Resource.Id == id)?.Resource;
 			return res;
 		}
 
 		[HttpPost]		
-		public IActionResult PostResource([FromBody] string res)
+		public IActionResult AddResource([FromBody] string res)
 		{
 			if (ModelState.IsValid)
 			{
-				_provider.CreateResource(new Resource() { Data = res.ToString() });
+				_provider.CreateResource(res);
 				return Ok(res);
 			}
 			return BadRequest(ModelState);
 		}
 
+		[HttpGet("edit/{id}")]
+		public EditResource BeginEdit(int id)
+		{
+			return _provider.BeginEdit(id);			
+		}
+
 		[HttpPut]
-		public IActionResult Put(Resource res)
+		public IActionResult EndEdit(Resource res)
 		{
 			if (ModelState.IsValid)
 			{
-				if (res.isEdit == false)
+				if (_provider.EndEdit(res))
 				{
-					_provider.BeginBlock(res);
-					_provider.UpdateResource(res);
-					_provider.EndBlock(res);
 					return Ok(res);
 				}	
 			}
@@ -59,15 +62,10 @@ namespace AppResourceAngular.Controllers
 		}
 
 		[HttpDelete("{id}")]
-		public IActionResult Delete(int id)
+		public IActionResult DeleteResource(int id)
 		{
-			Resource res = _provider.Resources.FirstOrDefault(d => d.Id == id);
-			if (res.isEdit == false)
-			{
-				_provider.BeginBlock(res);
-				_provider.DeleteResource(id);
-			}
-			return Ok(res);
+			_provider.DeleteResource(id);
+			return Ok();
 		}
 		
 	}
