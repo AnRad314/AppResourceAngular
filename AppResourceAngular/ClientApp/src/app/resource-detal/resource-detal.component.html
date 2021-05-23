@@ -1,11 +1,11 @@
 <div *ngIf="resource">
 
-  <h2>{{resource.data | uppercase}} Edit </h2>
+  <h2> Edit </h2>
   <div>
     <label for="resource-data">Resource data: </label>
     <input id="resource-data" [(ngModel)]="resource.data" placeholder="Resource data">
 
   </div>
-  <button (click)="goBack()">go back</button>
-  <button (click)="save()">save</button>
+  <button (click)="goBack()" class="btn btn-warning">Go back</button>
+  <button (click)="save()" class="btn btn-success">Save</button>
 </div>

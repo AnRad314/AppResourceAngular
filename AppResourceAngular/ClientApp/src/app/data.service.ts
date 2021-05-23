@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { RESOURCES } from './mock-resources';
+//import { RESOURCES } from './mock-resources';
 import { Resource } from './resource';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError, map, tap } from 'rxjs/operators';
@@ -29,6 +29,14 @@ export class DataService {
     httpOptions = {
       headers: new HttpHeaders({ 'Content-Type': 'application/json' })
     };
+
+  //addResource(res: Resource): Observable<Resource> {
+  //  return this.http.post<Resource>(this.resourcesUrl, res, this.httpOptions)
+  //};
+
+  addResource(res: Resource): Observable<any> {
+    return this.http.post<Resource>(this.resourcesUrl, res, this.httpOptions)
+  };
 
   deleteResource(id: number): Observable<Resource> {
     const url = `${this.resourcesUrl}/${id}`;

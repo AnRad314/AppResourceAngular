@@ -12,8 +12,9 @@ import { ResourcesComponent } from './resources/resources.component';
 import { ResourceDetalComponent } from './resource-detal/resource-detal.component';
 import { AppRoutingModule } from './app-routing.module';
 import { HttpClientInMemoryWebApiModule } from 'angular-in-memory-web-api';
-import { InMemoryDataService } from './in-memory-data.service'
+//import { InMemoryDataService } from './in-memory-data.service'
 import { catchError, map, tap } from 'rxjs/operators';
+import { ResourceAddComponent } from './resource-add/resource-add.component';
 
 @NgModule({
   declarations: [
@@ -23,14 +24,15 @@ import { catchError, map, tap } from 'rxjs/operators';
     CounterComponent,
     FetchDataComponent,
     ResourcesComponent,
-    ResourceDetalComponent
+    ResourceDetalComponent,
+    ResourceAddComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
     HttpClientModule,
-    HttpClientInMemoryWebApiModule.forRoot(
-      InMemoryDataService, { dataEncapsulation: false }
-    ),
+    //HttpClientInMemoryWebApiModule.forRoot(
+    //  InMemoryDataService, { dataEncapsulation: false }
+    //),
     FormsModule,
     RouterModule.forRoot([
       { path: '', component: HomeComponent, pathMatch: 'full' },
