@@ -15,13 +15,12 @@
   <div *ngIf="name.errors?.maxlength">
     Data can be max 300 characters long.
   </div>
-</div>
-  
+</div>  
 </div>
  
 <div>
-  <button (click)="goBack()" class="btn btn-warning">Go back</button>
   <button (click)="add(resName.value);" class="btn btn-success">Save</button>
+  <button (click)="goBack()" class="btn btn-warning">Go back</button>
 </div>
 
 

@@ -53,7 +53,7 @@ namespace AppResourceAngular.Data
 						}
 
 						item.IsEdit = true;
-						item.StartTimeEdit = DateTime.Now;
+						item.StartTimeEdit = DateTime.UtcNow;
 						
 
 						var t = new EditResource()

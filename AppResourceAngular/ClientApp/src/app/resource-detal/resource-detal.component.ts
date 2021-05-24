@@ -41,7 +41,6 @@ export class ResourceDetalComponent implements OnInit {
     const id = Number(this.route.snapshot.paramMap.get('id'));
     this.http.get<EditResource>(`api/resources/edit/${id}`).subscribe(r => {
       this.editRes = r;
-      var f = new Date().getTime()/1000;
       this.secondLeftToCloseEdit = r.maxTimeEditSec - ((new Date()).getTime()/1000 - r.startTimeEdit);
       this.subscription = interval(1000).subscribe(x =>
         this.secondLeftToCloseEdit = this.secondLeftToCloseEdit - 1);
