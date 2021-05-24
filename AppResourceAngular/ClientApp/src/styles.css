@@ -38,7 +38,6 @@ nav a {
   background-color: #e8e8e8;
   color: #3d3d3d;
   border-radius: 4px;
-  margin-right: 30px;
 }
 
 nav a:hover {
@@ -52,6 +51,7 @@ nav a.active {
 
 body {
   margin: 2em;
+  background-color: #fbfafa;
 }
 
 body, input[type="text"], button {
@@ -62,4 +62,7 @@ body, input[type="text"], button {
 * {
   font-family: Arial, Helvetica, sans-serif;
 }
-
+.alert {
+  padding: 0px;
+  color: #f70d0d;
+}

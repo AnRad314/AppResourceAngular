@@ -16,12 +16,14 @@ button {
   font-size: 1rem;
 }
 
-  button:hover {
-    background-color: #cfd8dc;
-  }
+button:hover {
+  background-color: #cfd8dc;
+}
 
-  button:disabled {
-    background-color: #eee;
-    color: #ccc;
-    cursor: auto;
-  }
+button:disabled {
+  background-color: #eee;
+  color: #ccc;
+  cursor: auto;
+}
+
+

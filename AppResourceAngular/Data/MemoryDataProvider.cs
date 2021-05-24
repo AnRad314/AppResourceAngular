@@ -41,26 +41,29 @@ namespace AppResourceAngular.Data
 				{
 					if (item.Resource.Id == id)
 					{
-						if (item.IsEdit && (DateTime.Now - item.StartTimeEdit).TotalSeconds < StopEditTimeSec)
+						if (item.IsEdit && (DateTime.UtcNow - item.StartTimeEdit).TotalSeconds < StopEditTimeSec)
 						{
 							return new EditResource()
 							{
 								Data = item.Resource,
 								AllowEdit = false,
-								StartTimeEdit = (long)item.StartTimeEdit.Subtract(new DateTime(1970, 1, 1)).TotalMilliseconds,
+								StartTimeEdit = (long)item.StartTimeEdit.Subtract(new DateTime(1970, 1, 1)).TotalSeconds,
 								MaxTimeEditSec = StopEditTimeSec
 							};
 						}
 
 						item.IsEdit = true;
 						item.StartTimeEdit = DateTime.Now;
-						return new EditResource()
+						
+
+						var t = new EditResource()
 						{
 							Data = item.Resource,
 							AllowEdit = true,
-							StartTimeEdit = (long)DateTime.Now.Subtract(new DateTime(1970, 1, 1)).TotalMilliseconds,
+							StartTimeEdit = (long)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1)).TotalSeconds),
 							MaxTimeEditSec = StopEditTimeSec
 						};
+						return t;
 					}
 				}
 				return null;

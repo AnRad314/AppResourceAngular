@@ -1,17 +1,32 @@
 
-<div class="container mb-20">
-  <nav>
-    <div class="d-flex align-items-start">
-      <a routerLink="/create">Create new </a>
+<div class=".container-fluid mb-3">
+  <div class="row">
+    <div class="col">
+      <nav>
+        <a routerLink="/create">Create new </a>
+      </nav>
     </div>    
-  </nav>
+  </div>  
 </div>
 
 <h2>Resources</h2>
-<ul class="resources">
-  <li *ngFor="let res of resources" >
-    <span class="badge ">{{res.id}}</span> {{res.data}}
-    <a routerLink="/detail/{{res.id}}">Edit</a>   
-  </li>
-</ul>
+<table class="table">
+  <thead class="thead-light" >
+    <tr >
+      <td> <b>ID</b></td>
+      <td> <b>Resource data</b></td>      
+      <td></td>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let res of resources" >
+      <td>{{res.id}}</td>
+      <td>{{res.data}}</td>      
+      <td>
+        <a routerLink="/detail/{{res.id}}">Edit</a>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
 

@@ -1,25 +1,42 @@
 <div *ngIf="editRes.allowEdit; else locked">
   <h2>Edit mode</h2>
-  <div>
+  <div class="form-group m-4">
     <label for="resource-data">Resource data: </label>
-    <input id="resource-data" [(ngModel)]="editRes.data.data" placeholder="Resource data">
-    <p>Time left: {{secondLeftToCloseEdit}} s</p>
-  </div>
+    <input id="resource-data" [(ngModel)]="editRes.data.data"   class="form-control" placeholder="Resource data"
+          required minlength="3" maxlength="300" name="data" #name="ngModel" >
+    <div class="h-25 d-inline-block">
+      <div *ngIf="name.invalid && (name.dirty || name.touched)"
+           class="alert">
+        <div *ngIf="name.errors?.required">
+          Data is required.
+        </div>
+        <div *ngIf="name.errors?.minlength">
+          Data must be at least 3 characters long.
+        </div>
+        <div *ngIf="name.errors?.maxlength">
+          Data can be max 300 characters long
+        </div>
+      </div>
+      <p>Time left: {{secondLeftToCloseEdit | number:'1.0-0'}} s</p>
+    </div>
+    </div>   
 
   <button (click)="save()" class="btn btn-success mr-">Save</button>
   <button (click)="delete()" class=" btn btn-danger">Delete</button>
   <button (click)="goBack()" class="btn btn-secondary">Cancel</button>
 </div>
 
-
 <ng-template #locked>
   <h2>Read-only mode </h2>
     <p>(this resource is locked by other user)</p> 
-    <div>
+    <div class="form-group m-4">
       <label for="resource-data">Resource data: </label>
       <input id="resource-data" [(ngModel)]="editRes.data.data" placeholder="Resource data" readonly>
-      <p>Time left: {{secondLeftToCloseEdit}} s</p>
+      <p>Time left: {{secondLeftToCloseEdit | number:'1.0-0'}} s</p>
     </div>
   <button (click)="refresh()" class="btn btn-success">Refresh</button>
   <button (click)="goBack()" class=" btn btn-secondary">Back</button>
 </ng-template>
+
+
+
