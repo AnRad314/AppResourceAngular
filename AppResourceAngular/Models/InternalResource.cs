@@ -9,5 +9,6 @@ namespace AppResourceAngular.Models
 	{
 		public Resource Resource { get; set; }
 		public bool IsEdit { get; set; }
+		public DateTime StartTimeEdit { get; set; }		
 	}
 }

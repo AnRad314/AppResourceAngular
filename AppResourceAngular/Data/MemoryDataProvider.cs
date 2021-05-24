@@ -10,6 +10,8 @@ namespace AppResourceAngular.Data
 {
 	public class MemoryDataProvider: IDataProvider
 	{
+		private const int StopEditTimeSec = 300;
+
 		private int _lastId = 1;
 		private readonly List<InternalResource> _resources = new List<InternalResource>();
 		private readonly ReaderWriterLock _rwl = new ReaderWriterLock();
@@ -39,20 +41,25 @@ namespace AppResourceAngular.Data
 				{
 					if (item.Resource.Id == id)
 					{
-						if (item.IsEdit)
-						{							
+						if (item.IsEdit && (DateTime.Now - item.StartTimeEdit).TotalSeconds < StopEditTimeSec)
+						{
 							return new EditResource()
 							{
 								Data = item.Resource,
-								AllowEdit = false
+								AllowEdit = false,
+								StartTimeEdit = (long)item.StartTimeEdit.Subtract(new DateTime(1970, 1, 1)).TotalMilliseconds,
+								MaxTimeEditSec = StopEditTimeSec
 							};
 						}
 
-						item.IsEdit = true;						
+						item.IsEdit = true;
+						item.StartTimeEdit = DateTime.Now;
 						return new EditResource()
 						{
 							Data = item.Resource,
-							AllowEdit = true
+							AllowEdit = true,
+							StartTimeEdit = (long)DateTime.Now.Subtract(new DateTime(1970, 1, 1)).TotalMilliseconds,
+							MaxTimeEditSec = StopEditTimeSec
 						};
 					}
 				}

@@ -9,5 +9,7 @@ namespace AppResourceAngular.Models
 	{
 		public Resource Data { get; set; }
 		public bool AllowEdit { get; set; }
+		public long StartTimeEdit { get; set; }
+		public int MaxTimeEditSec { get; set; }
 	}
 }

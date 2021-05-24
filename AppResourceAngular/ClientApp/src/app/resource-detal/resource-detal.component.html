@@ -3,6 +3,7 @@
   <div>
     <label for="resource-data">Resource data: </label>
     <input id="resource-data" [(ngModel)]="editRes.data.data" placeholder="Resource data">
+    <p>Time left: {{secondLeftToCloseEdit}} s</p>
   </div>
 
   <button (click)="save()" class="btn btn-success mr-">Save</button>
@@ -14,10 +15,11 @@
 <ng-template #locked>
   <h2>Read-only mode </h2>
     <p>(this resource is locked by other user)</p> 
-  <div>
-    <label for="resource-data">Resource data: </label>
-    <input id="resource-data" [(ngModel)]="editRes.data.data" placeholder="Resource data" readonly>
-  </div>
+    <div>
+      <label for="resource-data">Resource data: </label>
+      <input id="resource-data" [(ngModel)]="editRes.data.data" placeholder="Resource data" readonly>
+      <p>Time left: {{secondLeftToCloseEdit}} s</p>
+    </div>
   <button (click)="refresh()" class="btn btn-success">Refresh</button>
   <button (click)="goBack()" class=" btn btn-secondary">Back</button>
 </ng-template>

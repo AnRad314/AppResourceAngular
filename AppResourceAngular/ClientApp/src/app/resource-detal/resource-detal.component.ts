@@ -4,8 +4,7 @@ import { EditResource } from '../editResource';
 import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-
-import { Observable, of } from 'rxjs';
+import { Observable, Subscription, interval } from 'rxjs';
 
 
 @Component({
@@ -21,7 +20,9 @@ export class ResourceDetalComponent implements OnInit {
   editRes: EditResource
   baseUrl: string;
   private resourcesUrl = 'api/resources';
-  editMode: boolean = true;
+  private subscription: Subscription;
+
+  public secondLeftToCloseEdit: number = 0;
   
   constructor(@Inject('BASE_URL') baseUrl: string,   
     private http: HttpClient,
@@ -39,9 +40,11 @@ export class ResourceDetalComponent implements OnInit {
   ngOnInit(): void {    
     const id = Number(this.route.snapshot.paramMap.get('id'));
     this.http.get<EditResource>(`api/resources/edit/${id}`).subscribe(r => {
-      this.editRes = r
-    });
-    
+      this.editRes = r;
+      this.secondLeftToCloseEdit = r.maxTimeEditSec - ((new Date()).getTime() - r.startTimeEdit) / 1000;
+      this.subscription = interval(1000).subscribe(x =>
+        this.secondLeftToCloseEdit = this.secondLeftToCloseEdit - 1);
+    });    
   }
 
   refresh(): void {
